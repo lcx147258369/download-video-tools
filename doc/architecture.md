@@ -48,6 +48,6 @@ UI components follow separation of concerns; state can be consolidated into a ce
 - 下载任务队列与并发控制。  
 - 失败重试、暂停/取消。  
 - 插件化站点适配与策略配置。  
-- 跨平台二进制自动安装与更新。  
+- 跨平台二进制自动安装与更新（详见 `doc/binary-distribution.md`）。  
 
 These extensions can be added without changing the core layered boundaries.
