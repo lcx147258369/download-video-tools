@@ -18,7 +18,7 @@
 | 后端 Backend | URL 解析服务 Probe service（P0）：调用 yt-dlp 提取元数据并标准化。 | 🟡 **待优化拓展 / Needs Improvement** |
 | 后端 Backend | 下载执行器 Download runner（P0）：支持 formatId 与 outputFormat 参数。 | 🟡 **待优化拓展 / Needs Improvement** |
 | 后端 Backend | 进度解析 Progress parser（P0）：解析下载日志并推送结构化进度。 | 🟡 **待优化拓展 / Needs Improvement** |
-| 后端 Backend | 错误处理 Error handling（P1）：统一异常信息，提升可排障性。 | ⚪ **待办 / Todo** |
+| 后端 Backend | 错误处理 Error handling（P1）：统一异常信息，提升可排障性。 | 🟢 **已完成 / Completed** |
 | 桌面集成 Desktop Integration | Electron 主/渲染进程桥接 IPC bridge（P0）：通过 preload 暴露受控 API。 | 🟢 **已完成 / Completed** |
 | 桌面集成 Desktop Integration | 系统能力封装 System capability wrapper（P1）：打开目录、平台兼容路径处理。 | 🟡 **待优化拓展 / Needs Improvement** |
 | 二进制管理 Binary Management | yt-dlp 路径与可执行检查 Binary resolution/check（P0）：保证启动后可用，失败可提示。 | ⚪ **待办 / Todo** |

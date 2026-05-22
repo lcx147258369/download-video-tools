@@ -19,6 +19,7 @@ export function App() {
   const [selectedFormatId, setSelectedFormatId] = useState('best')
   const [tasks, setTasks] = useState<DownloadProgress[]>([])
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const api = window.electronAPI
   const isElectronAvailable = useMemo(() => Boolean(api), [api])
@@ -28,7 +29,12 @@ export function App() {
       return
     }
 
-    void api.getSettings().then(setSettings)
+    void api
+      .getSettings()
+      .then(setSettings)
+      .catch((error: unknown) => {
+        setErrorMessage(error instanceof Error ? error.message : 'Failed to load settings.')
+      })
     return api.onDownloadProgress((progress) => {
       setTasks((current) => {
         const index = current.findIndex((task) => task.taskId === progress.taskId)
@@ -48,9 +54,14 @@ export function App() {
       return
     }
 
-    const probed = await api.probeUrl(url.trim())
-    setVideoInfo(probed)
-    setSelectedFormatId(probed.formats[0]?.id ?? 'best')
+    setErrorMessage(null)
+    try {
+      const probed = await api.probeUrl(url.trim())
+      setVideoInfo(probed)
+      setSelectedFormatId(probed.formats[0]?.id ?? 'best')
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to probe URL.')
+    }
   }
 
   const handleStart = async () => {
@@ -58,11 +69,16 @@ export function App() {
       return
     }
 
-    await api.startDownload({
-      url: url.trim(),
-      outputDir: settings.downloadDir,
-      formatId: selectedFormatId,
-    })
+    setErrorMessage(null)
+    try {
+      await api.startDownload({
+        url: url.trim(),
+        outputDir: settings.downloadDir,
+        formatId: selectedFormatId,
+      })
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to start download.')
+    }
   }
 
   const handleSettingsChange = async (next: Partial<AppSettings>) => {
@@ -72,8 +88,13 @@ export function App() {
       return
     }
 
-    const persisted = await api.setSettings(next)
-    setSettings(persisted)
+    setErrorMessage(null)
+    try {
+      const persisted = await api.setSettings(next)
+      setSettings(persisted)
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to save settings.')
+    }
   }
 
   const handleOpenDirectory = async () => {
@@ -81,9 +102,14 @@ export function App() {
       return
     }
 
-    const selected = await api.openDirectory()
-    if (selected) {
-      await handleSettingsChange({ downloadDir: selected })
+    setErrorMessage(null)
+    try {
+      const selected = await api.openDirectory()
+      if (selected) {
+        await handleSettingsChange({ downloadDir: selected })
+      }
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to select directory.')
     }
   }
 
@@ -95,6 +121,7 @@ export function App() {
         {!isElectronAvailable && (
           <p className="notice">Electron bridge unavailable (running in browser-only mode).</p>
         )}
+        {errorMessage && <p className="notice">{errorMessage}</p>}
       </header>
 
       <UrlInput
