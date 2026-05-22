@@ -29,7 +29,7 @@ export class BinaryService {
   private async probeExecutable(name: string, command: string, args: string[]): Promise<BinaryStatus> {
     try {
       const { stdout, stderr } = await execFileAsync(command, args, {
-        timeout: 8_000,
+        timeout: 8000,
         windowsHide: true,
       })
 
