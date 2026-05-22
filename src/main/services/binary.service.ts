@@ -12,10 +12,17 @@ function extractVersion(output: string): string | undefined {
 
 export class BinaryService {
   private readonly ytDlpPath = process.env.YT_DLP_PATH?.trim() || 'yt-dlp'
+  private readonly ffmpegPath = process.env.FFMPEG_PATH?.trim() || 'ffmpeg'
 
   async getRuntimeDiagnostics(): Promise<RuntimeDiagnostics> {
+    const ytDlp = await this.probeExecutable('yt-dlp', this.ytDlpPath, ['--version'])
+    const ffmpeg = await this.probeExecutable('ffmpeg', this.ffmpegPath, ['-version'])
+
     return {
-      ytDlp: await this.probeExecutable('yt-dlp', this.ytDlpPath, ['--version']),
+      ytDlp,
+      ffmpeg,
+      supportsRemux: ffmpeg.available,
+      supportsAudioExtract: ffmpeg.available,
     }
   }
 

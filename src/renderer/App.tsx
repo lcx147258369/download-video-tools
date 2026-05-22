@@ -133,6 +133,12 @@ export function App() {
             yt-dlp unavailable: {diagnostics.ytDlp.command} ({diagnostics.ytDlp.error ?? 'unknown'})
           </p>
         )}
+        {diagnostics && !diagnostics.ffmpeg.available && (
+          <p className="notice">
+            ffmpeg unavailable: {diagnostics.ffmpeg.command} ({diagnostics.ffmpeg.error ?? 'unknown'}) —
+            remux/audio-extract may be unavailable.
+          </p>
+        )}
         {errorMessage && <p className="notice">{errorMessage}</p>}
       </header>
 

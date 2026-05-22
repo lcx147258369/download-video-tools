@@ -64,4 +64,7 @@ export interface BinaryStatus {
 
 export interface RuntimeDiagnostics {
   ytDlp: BinaryStatus
+  ffmpeg: BinaryStatus
+  supportsRemux: boolean
+  supportsAudioExtract: boolean
 }
