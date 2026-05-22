@@ -1,7 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 import { IPC_CHANNELS, IPC_ERROR_PREFIX } from '../shared/ipc.js'
-import type { AppSettings, DownloadProgress, DownloadRequest, VideoInfo } from '../shared/models.js'
+import type {
+  AppSettings,
+  DownloadProgress,
+  DownloadRequest,
+  RuntimeDiagnostics,
+  VideoInfo,
+} from '../shared/models.js'
 
 interface IpcErrorPayload {
   code: string
@@ -45,6 +51,7 @@ const electronAPI = {
   getSettings: (): Promise<AppSettings> => invokeIpc(IPC_CHANNELS.GET_SETTINGS),
   setSettings: (next: Partial<AppSettings>): Promise<AppSettings> =>
     invokeIpc(IPC_CHANNELS.SET_SETTINGS, next),
+  getBinaryStatus: (): Promise<RuntimeDiagnostics> => invokeIpc(IPC_CHANNELS.GET_BINARY_STATUS),
   onDownloadProgress: (listener: (progress: DownloadProgress) => void): (() => void) => {
     const handler = (_event: Electron.IpcRendererEvent, progress: DownloadProgress) => {
       listener(progress)

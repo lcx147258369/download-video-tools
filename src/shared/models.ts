@@ -53,3 +53,15 @@ export interface AppSettings {
   useProxy: boolean
   proxyUrl?: string
 }
+
+export interface BinaryStatus {
+  name: string
+  command: string
+  available: boolean
+  version?: string
+  error?: string
+}
+
+export interface RuntimeDiagnostics {
+  ytDlp: BinaryStatus
+}

@@ -1,4 +1,10 @@
-import type { AppSettings, DownloadProgress, DownloadRequest, VideoInfo } from '../../shared/models'
+import type {
+  AppSettings,
+  DownloadProgress,
+  DownloadRequest,
+  RuntimeDiagnostics,
+  VideoInfo,
+} from '../../shared/models'
 
 declare global {
   interface Window {
@@ -8,6 +14,7 @@ declare global {
       openDirectory: (path?: string) => Promise<string | null>
       getSettings: () => Promise<AppSettings>
       setSettings: (next: Partial<AppSettings>) => Promise<AppSettings>
+      getBinaryStatus: () => Promise<RuntimeDiagnostics>
       onDownloadProgress: (listener: (progress: DownloadProgress) => void) => () => void
     }
   }

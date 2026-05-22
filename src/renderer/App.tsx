@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import type { AppSettings, DownloadProgress, VideoInfo } from '../shared/models'
+import type { AppSettings, DownloadProgress, RuntimeDiagnostics, VideoInfo } from '../shared/models'
 import { DownloadTaskList } from './components/DownloadTaskList'
 import { SettingsPanel } from './components/SettingsPanel'
 import { UrlInput } from './components/UrlInput'
@@ -20,6 +20,7 @@ export function App() {
   const [tasks, setTasks] = useState<DownloadProgress[]>([])
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [diagnostics, setDiagnostics] = useState<RuntimeDiagnostics | null>(null)
 
   const api = window.electronAPI
   const isElectronAvailable = useMemo(() => Boolean(api), [api])
@@ -34,6 +35,12 @@ export function App() {
       .then(setSettings)
       .catch((error: unknown) => {
         setErrorMessage(error instanceof Error ? error.message : 'Failed to load settings.')
+      })
+    void api
+      .getBinaryStatus()
+      .then(setDiagnostics)
+      .catch((error: unknown) => {
+        setErrorMessage(error instanceof Error ? error.message : 'Failed to load binary diagnostics.')
       })
     return api.onDownloadProgress((progress) => {
       setTasks((current) => {
@@ -120,6 +127,11 @@ export function App() {
         <p>Electron + React MVP scaffold for yt-dlp / ffmpeg integration.</p>
         {!isElectronAvailable && (
           <p className="notice">Electron bridge unavailable (running in browser-only mode).</p>
+        )}
+        {diagnostics && !diagnostics.ytDlp.available && (
+          <p className="notice">
+            yt-dlp unavailable: {diagnostics.ytDlp.command} ({diagnostics.ytDlp.error ?? 'unknown'})
+          </p>
         )}
         {errorMessage && <p className="notice">{errorMessage}</p>}
       </header>
