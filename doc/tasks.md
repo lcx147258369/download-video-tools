@@ -26,4 +26,4 @@
 | 二进制管理 Binary Management | 跨平台分发策略 Cross-platform distribution（P2）：为后续安装包与自动更新做准备。 | 🟢 **已完成 / Completed** |
 | 文档 Documentation | PRD 与架构文档 PRD/architecture docs（P0）：明确需求范围与实现边界。 | 🟢 **已完成 / Completed** |
 | 文档 Documentation | 规范文档 Conventions doc（P0）：统一编码、提交、评审流程。 | 🟢 **已完成 / Completed** |
-| 文档 Documentation | 快速开始指南 Quick start guide（P1）：降低新成员上手成本。 | ⚪ **待办 / Todo** |
+| 文档 Documentation | 快速开始指南 Quick start guide（P1）：降低新成员上手成本。 | 🟢 **已完成 / Completed** |
